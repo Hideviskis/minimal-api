@@ -7,8 +7,8 @@ namespace minimal_api.Dominio.DTO.Enuns
 {
     public enum Perfil
     {
-        adm,
+        Adm,
 
-        editor
+        Editor
     }
 }
