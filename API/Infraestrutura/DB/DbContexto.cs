@@ -27,9 +27,10 @@ public class DbContexto : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        var stringConexao = _configuracaoAppSettings.GetConnectionString("mysql")?.ToString();
+        
         if (!optionsBuilder.IsConfigured)
         {
+            var stringConexao = _configuracaoAppSettings.GetConnectionString("mysql")?.ToString();
             if (!string.IsNullOrEmpty(stringConexao))
             {
                 optionsBuilder.UseMySql(
