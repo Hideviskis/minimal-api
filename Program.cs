@@ -37,7 +37,8 @@ builder.Services.AddAuthentication(option =>
         ValidateLifetime = true,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
         ValidateIssuer = false,
-        ValidateAudience = false
+        ValidateAudience = false,
+        RoleClaimType = "Perfil"
     };
 });
 
@@ -267,7 +268,10 @@ app.MapGet("/veiculos/{id}", ([FromRoute] int id, IVeiculoServicos veiculoServic
     var veiculos = veiculoServicos.BuscarId(id);
     if (veiculos == null) return Results.NotFound();
     return Results.Ok(veiculos);
-}).RequireAuthorization().WithTags("Veiculos");
+})
+.RequireAuthorization()
+.RequireAuthorization(new AuthorizeAttribute {Roles = "Adm, Editor"})
+.WithTags("Veiculos");
 
 app.MapPut("/veiculos/{id}", ([FromRoute] int id, VeiculoDTO veiculoDTO, IVeiculoServicos veiculoServicos) =>
 {
@@ -285,7 +289,10 @@ app.MapPut("/veiculos/{id}", ([FromRoute] int id, VeiculoDTO veiculoDTO, IVeicul
     veiculoServicos.Atualizar(veiculos);
 
     return Results.Ok(veiculos);
-}).RequireAuthorization().WithTags("Veiculos");
+})
+.RequireAuthorization()
+.RequireAuthorization(new AuthorizeAttribute {Roles = "Adm"})
+.WithTags("Veiculos");
 
 app.MapDelete("/veiculos/{id}", ([FromRoute] int id, IVeiculoServicos veiculoServicos) =>
 {
@@ -295,8 +302,10 @@ app.MapDelete("/veiculos/{id}", ([FromRoute] int id, IVeiculoServicos veiculoSer
     veiculoServicos.Apagar(veiculos);
     
     return Results.NoContent();
-}).RequireAuthorization().WithTags("Veiculos");
-
+})
+.RequireAuthorization()
+.RequireAuthorization(new AuthorizeAttribute {Roles = "Adm"})
+.WithTags("Veiculos");
 
 #endregion
 
